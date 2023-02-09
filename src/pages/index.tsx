@@ -3,23 +3,11 @@ import { useState } from "react";
 import PocketBase from "pocketbase";
 import { useRouter } from "next/router";
 import { login, logout } from "../utils";
-const validUser = async (email: string, password: string) => {
-  // const url = process.env.PB_URL;
-  const url = "https://nutritious-receptionist.pockethost.io";
-  const pb = new PocketBase(url);
-  logout();
-  try {
-    await login({ email, password });
-  } catch (e) {
-    console.log(e);
-  }
+import { useUserState } from "../state/store";
 
-  const valid = pb.authStore.model ? true : false;
-  return valid;
-};
 const Home: NextPage = () => {
   const router = useRouter();
-
+  const updateUserData = useUserState((state) => state.updateUserData);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
@@ -56,9 +44,10 @@ const Home: NextPage = () => {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      validUser(email, password)
-                        .then((res) => {
-                          if (res) {
+                      login({ email, password })
+                        .then((data) => {
+                          if (data?.isValid) {
+                            updateUserData(data.authData.record);
                             void router.push("/dashboard");
                           } else {
                             console.log(

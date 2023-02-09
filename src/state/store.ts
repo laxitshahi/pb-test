@@ -1,24 +1,21 @@
 import { create } from "zustand";
-
-interface Users {
-  username: string;
-  email: string;
-}
+import { Record } from "pocketbase";
 
 interface UserState {
-  user: Users;
+  name: string;
+  avatar: string;
+  collectionName: string;
+  id: string;
+  username: string;
+  email: string;
+  setName: (name: string) => void;
 }
 
-const useUserStore = create<UserState>()((set) => ({
-  user: { username: "", email: "" },
-  setUser: () =>
-    set((state) => ({
-      user: { username: state.user.email, email: state.user.email },
-    })),
-  removeUser: () =>
-    set(() => ({
-      user: { username: "", email: "" },
-    })),
+interface State {
+  userData: Record | null;
+  updateUserData: (data: Record) => void;
+}
+export const useUserState = create<State>()((set) => ({
+  userData: null,
+  updateUserData: (data) => set(() => ({ userData: data })),
 }));
-
-export default useUserStore;

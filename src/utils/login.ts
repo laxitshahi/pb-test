@@ -1,5 +1,4 @@
 import PocketBase, { Admin, Record } from "pocketbase";
-
 interface Props {
   email: string;
   password: string;
@@ -10,6 +9,7 @@ async function login({ email, password }: Props) {
   const url = "https://nutritious-receptionist.pockethost.io";
   const pb = new PocketBase(url);
 
+  pb.authStore.clear();
   const authData = await pb
     .collection("users")
     .authWithPassword(email, password);
@@ -31,9 +31,9 @@ async function login({ email, password }: Props) {
   } catch (e) {
     console.log(e);
   }
-  //Logout
-  //   pb.authStore.clear();
-  return { authData, users };
+  const isValid = pb.authStore.model ? true : false;
+
+  return { authData, users, isValid };
 }
 
 export default login;
