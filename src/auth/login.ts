@@ -1,14 +1,11 @@
-import PocketBase, { Admin, Record } from "pocketbase";
+import pb from "../lib/pocketbase";
+
 interface Props {
   email: string;
   password: string;
 }
 
 async function login({ email, password }: Props) {
-  // const url = process.env.PB_URL;
-  const url = "https://nutritious-receptionist.pockethost.io";
-  const pb = new PocketBase(url);
-
   pb.authStore.clear();
   const authData = await pb
     .collection("users")

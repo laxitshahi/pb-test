@@ -1,5 +1,6 @@
-import { create } from "zustand";
-import { Record } from "pocketbase";
+import { create } from 'zustand';
+import type { Record } from 'pocketbase';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserState {
   name: string;
@@ -15,7 +16,13 @@ interface State {
   userData: Record | null;
   updateUserData: (data: Record) => void;
 }
-export const useUserState = create<State>()((set) => ({
-  userData: null,
-  updateUserData: (data) => set(() => ({ userData: data })),
-}));
+
+export const useUserState = create<State>()(
+  persist(
+    (set) => ({
+      userData: null,
+      updateUserData: (data) => set(() => ({ userData: data })),
+    }),
+    { name: 'userState', storage: createJSONStorage(() => sessionStorage) }
+  )
+);

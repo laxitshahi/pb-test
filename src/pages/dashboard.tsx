@@ -1,20 +1,31 @@
-import { logout } from "../utils";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { useUserState } from "../state/store";
+import { logout } from '../auth';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { useUserState } from '../state/store';
+import { useEffect, useState } from 'react';
+import type { Record } from 'pocketbase';
 
 const Dashboard = () => {
   const router = useRouter();
   const userData = useUserState((state) => state.userData);
+  const [userState, setUserState] = useState<Record | null>();
+  useEffect(() => {
+    if (!userData) {
+      router.push('/');
+    }
+    setUserState(userData);
+  }, [userData]);
+
   return (
     <div>
       {/* Header */}
-      <header className="mx-10 mt-4 flex justify-between rounded-2xl border-2 border-black p-4">
-        <span>Welcome {userData ? userData.name : "NO_NAME"}</span>
+      <header className=" sticky mx-auto mt-4 flex max-w-7xl justify-between rounded-2xl border-2 border-black p-4">
+        <span>Welcome {userState ? userState.name : 'NO_NAME'}</span>
         <button
           onClick={() => {
             logout();
-            void router.push("/");
+            useUserState.persist.clearStorage();
+            void router.push('/');
           }}
         >
           Logout
@@ -22,19 +33,28 @@ const Dashboard = () => {
       </header>
 
       {/* Body */}
-      <section>
-        <div>
-          <Image
-            src={
-              typeof userData?.avatar === "string"
-                ? `https://nutritious-receptionist.pockethost.io/api/files/users/${userData.id}/${userData.avatar}`
-                : "https://nutritious-receptionist.pockethost.io/api/files/users/4tkiwiglmpt25ma/matty_Gkbc7yaN0M.jpeg"
-            }
-            width={96}
-            height={96}
-            alt="Profile Picture"
-          />
-        </div>
+      <section className="h-screen rounded-2xl">
+        <aside className="border-1 mt-4  ml-4 h-2/5 max-w-xl rounded-3xl border-black bg-gray-100 shadow-lg">
+          <h1 className="grid justify-center p-2 text-3xl">Groceries</h1>
+        </aside>
+        <aside className="border-1 mt-4  ml-4 h-2/5 max-w-xl rounded-3xl border-black bg-gray-100 shadow-lg">
+          <h1 className="grid justify-center p-2 text-3xl">Groceries</h1>
+        </aside>
+        <aside className="border-1 mt-4  ml-4 h-2/5 max-w-xl rounded-3xl border-black bg-gray-100 shadow-lg">
+          <h1 className="grid justify-center p-2 text-3xl">Groceries</h1>
+        </aside>
+        {/* <Image
+          className="rounded-2xl"
+          src={
+            typeof userState?.avatar === 'string'
+              ? `https://nutritious-receptionist.pockethost.io/api/files/users/${userState.id}/${userState.avatar}`
+              : ''
+          }
+          width={96}
+          height={96}
+          alt="Profile Picture"
+        /> */}
+        <aside></aside>
       </section>
 
       <div></div>
