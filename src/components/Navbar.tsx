@@ -1,11 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-interface Props = {
-
-}
-
-export default function Navbar({}: Props) {
-  return (
-    <div>Navbar</div>
-  )
+export default function Navbar() {
+  return <div>Navbar</div>;
 }

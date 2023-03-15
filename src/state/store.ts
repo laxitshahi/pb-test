@@ -12,17 +12,24 @@ interface UserState {
   setName: (name: string) => void;
 }
 
-interface State {
+type State = {
   userData: Record | null;
+  numOfTasks: number;
+};
+type Actions = {
   updateUserData: (data: Record) => void;
-}
+  updateNumberOfTasks: (data: number) => void;
+};
 
-export const useUserState = create<State>()(
+export const useUserState = create<State & Actions>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       userData: null,
+      numOfTasks: 0,
       updateUserData: (data) => set(() => ({ userData: data })),
+      updateNumberOfTasks: () =>
+        set((state) => ({ numOfTasks: state.numOfTasks + 1 })),
     }),
-    { name: 'userState', storage: createJSONStorage(() => sessionStorage) }
+    { name: 'userState', storage: createJSONStorage(() => localStorage) }
   )
 );

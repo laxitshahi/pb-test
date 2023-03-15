@@ -1,48 +1,48 @@
-import React from "react";
-
-// type Props = {};
+import { useState } from 'react';
+import useLogin from '../hooks/useLogin';
+import { Button } from './ui/button';
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login, isLoading } = useLogin();
+
   return (
     <section>
-      <div className="flex h-screen">
-        <div className="w-8/12 m-auto border-4 border-black h-2/4">
-          {/*Login*/}
-          <section className="grid h-3/4 place-items-center">
-            <h2>Welcome!</h2>
-            {/*Email*/}
-            <section>
-              <h3>Email</h3>
-              <input
-                className="border-2 border-black rounded-md "
-                type="text"
-              />
-            </section>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void login({ email, password });
+        }}
+        className="grid m-10 place-items-center gap-y-10"
+      >
+        {/*Email*/}
+        <section>
+          <h3>Email</h3>
+          <input
+            value={email}
+            className="p-1 border-2 border-black rounded-md"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </section>
+        {/*Password*/}
+        <section>
+          <h3>Password</h3>
+          <input
+            value={password}
+            className="p-1 border-2 border-black rounded-md"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </section>
 
-            {/*Email*/}
-            <section>
-              <h3>Password</h3>
-              <input
-                className="border-2 border-black rounded-md "
-                type="text"
-              />
-            </section>
-
-            <section>
-              <h3 className="underline hover:decoration-4">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    // void router.push("/hello");
-                  }}
-                >
-                  Create an Account
-                </button>
-              </h3>
-            </section>
-          </section>
-        </div>
-      </div>
+        <section>
+          <Button type="submit" variant="default">
+            {isLoading ? 'Loading...' : 'Login'}
+          </Button>
+        </section>
+      </form>
     </section>
   );
 }
