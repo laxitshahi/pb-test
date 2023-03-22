@@ -27,6 +27,10 @@ const config = {
         protocol: 'https',
         hostname: 'nutritious-receptionist.pockethost.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+      },
     ],
   },
 };

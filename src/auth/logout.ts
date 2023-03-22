@@ -1,3 +1,0 @@
-/**
- * @MOVED to custom hook
- */

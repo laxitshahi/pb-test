@@ -1,9 +1,8 @@
 import pb from '../lib/pocketbase';
 import { useUserState } from '../state/store';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { ClientResponseError } from 'pocketbase';
-
+import { useMutation } from 'react-query';
+import { UseBoundStore } from 'zustand';
 type Props = {
   email: string;
   password: string;
@@ -12,24 +11,21 @@ type Props = {
 function useLogin() {
   const router = useRouter();
   const updateUserData = useUserState((state) => state.updateUserData);
-  const [isLoading, setIsLoading] = useState(false);
 
   async function login({ email, password }: Props) {
     pb.authStore.clear();
-    try {
-      setIsLoading(true);
-      const authData = await pb
-        .collection('users')
-        .authWithPassword(email, password);
-      updateUserData(authData.record);
-      void router.push('/dashboard');
-    } catch (e: any) {
-      console.log(e.data);
-      console.log(e);
-    }
-    setIsLoading(false);
+
+    const authData = await pb
+      .collection('users')
+      .authWithPassword(email, password);
+
+    updateUserData(authData.record);
+    void router.push('/dashboard');
   }
-  return { login, isLoading };
+
+  // useMutation handles a number of things such as:
+  // isLoading, isError, wrapping try and catch
+  return useMutation(login);
 }
 
 export default useLogin;

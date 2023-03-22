@@ -5,8 +5,9 @@ import { Button } from './ui/button';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isLoading } = useLogin();
 
+  // "mutate" is just the function that is wrapped by react-query
+  const { mutate: login, isLoading, isError } = useLogin();
   return (
     <section>
       <form
@@ -14,14 +15,14 @@ function Login() {
           e.preventDefault();
           void login({ email, password });
         }}
-        className="grid m-10 place-items-center gap-y-10"
+        className="m-10 grid place-items-center gap-y-10"
       >
         {/*Email*/}
         <section>
           <h3>Email</h3>
           <input
             value={email}
-            className="p-1 border-2 border-black rounded-md"
+            className="rounded-md border-2 border-black p-1"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -31,7 +32,7 @@ function Login() {
           <h3>Password</h3>
           <input
             value={password}
-            className="p-1 border-2 border-black rounded-md"
+            className="rounded-md border-2 border-black p-1"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -39,7 +40,7 @@ function Login() {
 
         <section>
           <Button type="submit" variant="default">
-            {isLoading ? 'Loading...' : 'Login'}
+            {isLoading ? 'Loading...' : isError ? 'Try Again' : 'Login'}
           </Button>
         </section>
       </form>

@@ -1,23 +1,16 @@
 import { create } from 'zustand';
-import type { Record } from 'pocketbase';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { Record } from 'pocketbase';
 
-interface UserState {
-  name: string;
-  avatar: string;
-  collectionName: string;
-  id: string;
-  username: string;
-  email: string;
-  setName: (name: string) => void;
-}
-
-type State = {
+export type State = {
   userData: Record | null;
+  groups: Record[] | null;
   numOfTasks: number;
 };
+
 type Actions = {
   updateUserData: (data: Record) => void;
+  updateGroups: (data: Record[]) => void;
   updateNumberOfTasks: (data: number) => void;
 };
 
@@ -25,8 +18,10 @@ export const useUserState = create<State & Actions>()(
   persist(
     (set, get) => ({
       userData: null,
+      groups: null,
       numOfTasks: 0,
       updateUserData: (data) => set(() => ({ userData: data })),
+      updateGroups: (data) => set(() => ({ groups: data })),
       updateNumberOfTasks: () =>
         set((state) => ({ numOfTasks: state.numOfTasks + 1 })),
     }),

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import pb from '../lib/pocketbase';
+import { useMutation } from 'react-query';
 
 type Props = {
   email: string;
@@ -10,7 +10,6 @@ type Props = {
 
 function useRegister() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   async function register({ email, name, password }: Props) {
     pb.authStore.clear();
@@ -24,19 +23,11 @@ function useRegister() {
       name: name,
     };
 
-    try {
-      setIsLoading(true);
-      await pb.collection('users').create(data);
-      router.push('/login');
-    } catch (e: any) {
-      alert('Please ensure that your email, name, and password are valid');
-      console.log(e.data);
-      console.log(e);
-    }
-    setIsLoading(false);
+    await pb.collection('users').create(data);
+    router.push('/login');
   }
 
-  return { register, isLoading };
+  return useMutation(register);
 }
 
 export default useRegister;
