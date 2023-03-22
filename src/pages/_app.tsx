@@ -4,10 +4,12 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import '../styles/globals.css';
 import { Roboto } from '@next/font/google';
+
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '700'],
 });
+
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [queryClient] = useState(() => new QueryClient());
 

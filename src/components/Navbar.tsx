@@ -9,24 +9,27 @@ type props = {
   userState: Record | null;
 };
 
-function Header({ userState }: props) {
+function Navbar({ userState }: props) {
   // Custom Hooks
   const logout = useLogout();
   console.log(userState);
   const sections = ['Home', 'Profile', 'Settings'];
   return (
     <section className="m-4">
-      {/* <Slideover
+      <Slideover
         children={
           <div className="grid gap-4 text-xl ">
             {sections.map((x) => (
-              <div className="delay-400 transition-all hover:skew-x-12 hover:underline">
+              <div
+                key={x}
+                className="delay-400 transition-all hover:skew-x-12 hover:underline"
+              >
                 {x}
               </div>
             ))}
           </div>
         }
-      /> */}
+      />
 
       <header className="sticky m-4 mx-auto flex max-w-7xl justify-between rounded-2xl border-2 border-black p-4">
         <div className="flex items-center space-x-2">
@@ -56,4 +59,4 @@ function Header({ userState }: props) {
   );
 }
 
-export default Header;
+export default Navbar;
