@@ -15,8 +15,8 @@ function Group() {
   const { mutate } = getGroup();
 
   useEffect(() => {
-    // get(id);
-  });
+    get(id);
+  }, []);
 
   return <div>{id}</div>;
 }

@@ -1,30 +1,21 @@
 import pb from '../lib/pocketbase';
 import { useUserState } from '../state/store';
 import { useMutation } from 'react-query';
-import { useState } from 'react';
-import { Record } from 'pocketbase';
+
 type Props = {
-  groupIds: string[];
+  userId: string;
 };
 
 function useGroups() {
   const updateGroups = useUserState((state) => state.updateGroups);
 
-  async function getGroups({ groupIds }: Props) {
-    const records: Record[] = [];
-
-    /**
-     * @ERROR :: Not getting data on first render
-     */
-    if (groupIds) {
-      await Promise.all(
-        groupIds.map(async (id) => {
-          const record = await pb.collection('groups').getOne(id);
-          records.push(record);
-        })
-      );
+  async function getGroups({ userId }: Props) {
+    if (userId) {
+      const records = await pb.collection('groups').getList(1, 50, {
+        filter: `users.id?="${pb.authStore.model?.id}"`,
+      });
+      if (records) updateGroups(records.items);
     }
-    updateGroups(records);
   }
 
   async function getGroup({ groupId }: { groupId: string }) {

@@ -3,8 +3,8 @@ import useLogin from '../hooks/useLogin';
 import { Button } from './ui/button';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('matty@gmail.com');
+  const [password, setPassword] = useState('password');
 
   // "mutate" is just the function that is wrapped by react-query
   const { mutate: login, isLoading, isError } = useLogin();

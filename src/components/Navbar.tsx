@@ -12,7 +12,7 @@ type props = {
 function Navbar({ userState }: props) {
   // Custom Hooks
   const logout = useLogout();
-  console.log(userState);
+  // console.log(userState);
   const sections = ['Home', 'Profile', 'Settings'];
   return (
     <section className="m-4">
