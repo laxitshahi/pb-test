@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useLogout from '../hooks/useLogout';
 import { Record } from 'pocketbase';
 import { ExitIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Slideover, toggleSlideover } from './ui/slideover';
+import { useUserState } from '../state/store';
 
-type props = {
-  userState: Record | null;
+type Props = {
+  userData: Record | null;
 };
-
-function Navbar({ userState }: props) {
+function Navbar() {
+  const userData = useUserState((state) => state.userData);
   // Custom Hooks
   const logout = useLogout();
-  // console.log(userState);
-  const sections = ['Home', 'Profile', 'Settings'];
+
   return (
-    <section className="m-4">
+    <nav className="m-4">
       <Slideover
         children={
           <div className="grid gap-4 text-xl ">
-            {sections.map((x) => (
+            {['Home', 'Profile', 'Settings'].map((x) => (
               <div
                 key={x}
                 className="delay-400 transition-all hover:skew-x-12 hover:underline"
@@ -36,8 +36,8 @@ function Navbar({ userState }: props) {
           <Avatar>
             <AvatarImage
               src={
-                typeof userState?.avatar === 'string'
-                  ? `https://nutritious-receptionist.pockethost.io/api/files/users/${userState.id}/${userState.avatar}`
+                typeof userData?.avatar === 'string'
+                  ? `https://nutritious-receptionist.pockethost.io/api/files/users/${userData.id}/${userData.avatar}`
                   : ''
               }
             />
@@ -55,7 +55,7 @@ function Navbar({ userState }: props) {
           <span>Logout</span>
         </button>
       </header>
-    </section>
+    </nav>
   );
 }
 

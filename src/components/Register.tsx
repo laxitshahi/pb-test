@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useUserState } from '../state/store';
 import { Button } from './ui/button';
 import useRegister from '../hooks/useRegister';
 

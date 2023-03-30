@@ -1,24 +1,19 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import getGroup from '../../hooks/useGroups';
-import pb from '../../lib/pocketbase';
-
-async function get(id: string) {
-  const record = await pb.collection('groups').getOne(id);
-  console.log(record);
-}
+import Loading from '../../components/Loading';
+import { useGroupQuery } from '../../hooks/useGroupQuery';
 
 function Group() {
   const router = useRouter();
-  const id = router.query.groupid;
+  console.log(router);
+  const id = router?.query?.groupid || '';
+  const groupId = (Array.isArray(id) ? id[0] : id) ?? '';
+  const { data, isLoading, isError } = useGroupQuery(groupId);
 
-  const { mutate } = getGroup();
-
-  useEffect(() => {
-    get(id);
-  }, []);
-
-  return <div>{id}</div>;
+  if (isLoading) {
+    return <Loading />;
+  }
+  return <div></div>;
 }
 
 export default Group;
